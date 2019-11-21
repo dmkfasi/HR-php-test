@@ -34,6 +34,10 @@ class Order extends Model
         return self::orderStatus[$this->status];
     }
 
+    public function getStatusList() {
+      return self::orderStatus;
+    }
+
     public function getTotalAmount() {
         $this->products->each(function ($p) {
             $this->setLineItemAmount($p->pivot->price * $p->pivot->quantity);
