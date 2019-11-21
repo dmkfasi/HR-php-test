@@ -49,6 +49,7 @@
         <select id="partner_id"
                 name="partner_id">
 
+            <!-- Having an empty option for test's sake -->
             <option value="">-</option>
             @foreach ($partners as $partner)
             <option value="{{ $partner->id }}" @if($partner->id === $order->partner->id) selected @endif>{{ $partner->name }}</option>
@@ -84,6 +85,7 @@
         <select id="status"
                 name="status">
 
+            <!-- Having an empty option for test's sake -->
             <option value="">-</option>
             @foreach ($order->getStatusList() as $k => $v)
             <option value="{{ $k }}" @if($k === $order->status) selected @endif>{{ $v }}</option>
