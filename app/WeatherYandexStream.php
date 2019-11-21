@@ -7,6 +7,9 @@ use GuzzleHttp as Guzzle;
 
 class WeatherYandexStream extends Model
 {
+    // HTTP client library to fetch data with
+    private $_client = null;
+
     // HTTP method to fetch data with, defined in weather.php settings file
     private $_http_method = '';
 
@@ -22,8 +25,10 @@ class WeatherYandexStream extends Model
     public $forecasts = null;
 
     public function __construct() {
-        $this->_http_method = config('weather.yandex.method');
-        $this->_uri = config('weather.yandex.uri');
+      $this->_http_method = config('weather.yandex.method');
+      $this->_uri = config('weather.yandex.uri');
+
+      $this->_client = new Guzzle\Client();
     }
 
     /**
@@ -59,34 +64,32 @@ class WeatherYandexStream extends Model
      **/
     public function fetch()
     {
-        // Download Weather data using GuzzleHttp library
-        try {
-            $client = new Guzzle\Client();
-            
-            $response = $client->request(
-                $this->_http_method, 
-                $this->_uri, [
-                    'query' => $this->_composeQuery(),
-                    'headers' => $this->_composeHeaders()
-                ],
-            );
+      // Download Weather data using GuzzleHttp library
+      try {
+          $response = $this->_client->request(
+            $this->_http_method, 
+            $this->_uri, [
+                'query' => $this->_composeQuery(),
+                'headers' => $this->_composeHeaders()
+            ],
+        );
 
-            // Collect contents
-            $json = $response->getBody()->getContents();
+        // Collect contents
+        $json = $response->getBody()->getContents();
 
-            if (!blank($json)) {
-                $this->_json = $json;
-            } else {
-                throw new Exception('Unable to fetch JSON file from the URL specified.');
-            }
-
-        } catch (\GuzzleHttp\Exception\ClientException $e) {
-            throw new \Exception('Unable to fetch fresh data: ' . $e->getMessage());
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
-            throw new \Exception('Unable to fetch fresh data: ' . $e->getMessage());
+        if (!blank($json)) {
+            $this->_json = $json;
+        } else {
+            throw new Exception('Unable to fetch JSON file from the URL specified.');
         }
 
-        return true;
+      } catch (\GuzzleHttp\Exception\ClientException $e) {
+          throw new \Exception('Unable to fetch fresh data: ' . $e->getMessage());
+      } catch (\GuzzleHttp\Exception\RequestException $e) {
+          throw new \Exception('Unable to fetch fresh data: ' . $e->getMessage());
+      }
+
+      return true;
     }
     
     /**
