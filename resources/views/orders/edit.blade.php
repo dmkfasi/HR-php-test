@@ -85,7 +85,7 @@
                 name="status">
 
             <option value="">-</option>
-            @foreach ($order->getOrderStatusList() as $k => $v)
+            @foreach ($order->getStatusList() as $k => $v)
             <option value="{{ $k }}" @if($k === $order->status) selected @endif>{{ $v }}</option>
             @endforeach
         </select>
