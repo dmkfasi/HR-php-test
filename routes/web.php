@@ -11,6 +11,14 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', function() {
+    return view('layouts.app');
 });
+
+// Weather Card view
+Route::get('/weather', 'WeatherController@index')->name('weather');
+
+// Orders REST routes
+Route::get('/orders', 'OrderController@index')->name('orders');
+Route::get('/orders/{id}/edit', 'OrderController@edit')->name('orders/edit');
+Route::put('/orders/{id}', 'OrderController@update')->name('orders/update');
