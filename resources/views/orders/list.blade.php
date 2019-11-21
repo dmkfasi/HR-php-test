@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="row">
-    Список заказов
+    <h3>Список заказов</h3>
 
     <table class="table-bordered m-3 p-3">
         <th class="p-3 m-3">ид_заказа</th>
