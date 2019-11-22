@@ -90,12 +90,9 @@ class OrderController extends Controller
       // Direct OrderCompleted mailable into a queue
       // using Partner email address as the main destination
       // and carbon copy to all the Vendors
-      try {
-        // This silently fails when no queue driver available
-        Mail::to($order->partner->email)
-        ->cc($vendorEmails->toArray())
-        ->queue(new OrderCompleted($order));
-      } catch(Exception $e) {
-      }
+      // This silently fails when no queue driver available
+      Mail::to($order->partner->email)
+      ->cc($vendorEmails->toArray())
+      ->queue(new OrderCompleted($order));
     }
 }
