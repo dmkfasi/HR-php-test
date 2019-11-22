@@ -66,7 +66,6 @@ class OrderController extends Controller
                   ]
               );
           }
-
           return back()->with('update_success', __('Order update successful.'));
         } catch (Illuminate\Database\QueryException $e) {
           // TODO Log error
@@ -89,8 +88,11 @@ class OrderController extends Controller
       // Direct OrderCompleted mailable into a queue
       // using Partner email address as the main destination
       // and carbon copy to all the Vendors
-      Mail::to($order->partner->email)
-      ->cc($vendorEmails->toArray())
-      ->queue(new OrderCompleted($order));
+      try {
+        Mail::to($order->partner->email)
+        ->cc($vendorEmails->toArray())
+        ->queue(new OrderCompleted($order));
+      } catch(Exception $e) {
+      }
     }
 }
