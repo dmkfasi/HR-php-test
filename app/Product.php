@@ -13,7 +13,6 @@ class Product extends Model
     }
 
     public function vendors() {
-        return $this->belongsTo(Vendor::class, 'order_products')
-            ->withTimestamps();
+        return $this->belongsTo(Vendor::class, 'order_products');
     }
 }
