@@ -31,7 +31,7 @@ class OrderCompleted extends Mailable
      */
     public function build()
     {
-        return $this->markdown('orders.email-completed')
+      return $this->markdown('orders.email-completed')
                 ->with('order', $this->order);
     }
 }
