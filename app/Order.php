@@ -51,16 +51,20 @@ class Order extends Model
 
     // Calculates Order's total by computing line item amount
     public function getTotalAmount() {
-        $this->products->each(function ($p) {
-            $this->setLineItemAmount($p->pivot->price * $p->pivot->quantity);
-        });
+      $this->getLineItemAmount();
+      $total = collect($this->_line_item_amount);
 
-        $total = collect($this->_line_item_amount);
-
-        return $total->sum();
+      return $total->sum();
     }    
 
-    // Line item amount setter
+    // Iterates and calculates every Line Item amount
+    public function getLineItemAmount() {
+      $this->products->each(function ($p) {
+        $this->setLineItemAmount($p->pivot->price * $p->pivot->quantity);
+      });
+    }
+
+    // Stores Line Item amount
     public function setLineItemAmount($amount = 0) {
         $this->_line_item_amount[] = $amount;
     }
