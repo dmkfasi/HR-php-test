@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Order;
+use App\Partner;
 
 class OrderController extends Controller
 {
     public function index() {
         // Might want to use chunk() instead...
-        $orders = \App\Order::all();
+        $orders = Order::all();
 
         if (\View::exists('orders.list')) {
             return view('orders.list')
@@ -20,8 +23,8 @@ class OrderController extends Controller
     }
 
     public function edit(Request $r) {
-        $order = \App\Order::findOrFail($r->id);
-        $partners = \App\Partner::all();
+        $order = Order::findOrFail($r->id);
+        $partners = Partner::all();
 
         if (\View::exists('orders.edit')) {
             return view('orders.edit')
@@ -42,13 +45,13 @@ class OrderController extends Controller
         ]);
 
         try {
-          $order = \App\Order::findOrFail($id);
-          $order->update([]);
+          $order = Order::findOrFail($id);
+          $order->update($data);
 
           // As the task describes, send out
           // an email notification for extra credits
           if ((int)$order->status == $order::STATE_COMPLETED) {
-            // TODO mail enqueue
+            $this->sendCompletedMail($order);
           }
 
           // Updates product quantity within the pivot table
@@ -68,5 +71,17 @@ class OrderController extends Controller
             // TODO Log error
             return back()->with('update_failure', __('Unable to update Order.'));
         }
+    }
+
+    // Enqueues mail notification to the Order Partner 
+    // and all the Order Produts Vendors
+    protected function sendCompletedMail(Order $order) {
+      // при установке статуса заказа "завершен" 
+      // требуется отправить email - партнеру и 
+      // всем поставщикам продуктов из заказа 
+
+//      
+//          Mail::to()
+//          ->queue(new \App\Mail\OrderCompleted($order));
     }
 }
