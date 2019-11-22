@@ -9,6 +9,11 @@
             {{ session('update_success') }}
         </div>
     @endif
+    @if (session('update_failure'))
+        <div class="alert alert-danger">
+            {{ session('update_failure') }}
+        </div>
+    @endif
 </div>
 
 <form action="{{ route('orders/update', $order->id) }}" method="POST">
