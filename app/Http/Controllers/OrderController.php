@@ -41,27 +41,32 @@ class OrderController extends Controller
             'products' => ''
         ]);
 
-        $order = \App\Order::findOrFail($id);
-        $order->update($data);
-        
-        // As the task describes, send out
-        // an email notification for extra credits
-        if ((int)$order->status == $order::STATE_COMPLETED) {
-          
-        }
+        try {
+          $order = \App\Order::findOrFail($id);
+          $order->update([]);
 
-        // Updates product quantity within the pivot table
-        // Although out of score of the task,
-        // but since I have implement it anyways...
-        foreach ($data['products'] as $k => $v) {
-            $order->products()->updateExistingPivot(
-                $k,
-                [
-                    'quantity' => $v
-                ]
-            );
-        }
+          // As the task describes, send out
+          // an email notification for extra credits
+          if ((int)$order->status == $order::STATE_COMPLETED) {
+            // TODO mail enqueue
+          }
 
-        return back()->with('update_success', __('Order update successful.'));
+          // Updates product quantity within the pivot table
+          // Although out of score of the task,
+          // but since I have implement it anyways...
+          foreach ($data['products'] as $k => $v) {
+              $order->products()->updateExistingPivot(
+                  $k,
+                  [
+                      'quantity' => $v
+                  ]
+              );
+          }
+
+          return back()->with('update_success', __('Order update successful.'));
+        } catch (Illuminate\Database\QueryException $e) {
+            // TODO Log error
+            return back()->with('update_failure', __('Unable to update Order.'));
+        }
     }
 }
