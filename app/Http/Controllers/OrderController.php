@@ -66,7 +66,9 @@ class OrderController extends Controller
                   ]
               );
           }
+
           return back()->with('update_success', __('Order update successful.'));
+
         } catch (Illuminate\Database\QueryException $e) {
           // TODO Log error
           return back()->with('update_failure', __('Unable to update Order.'));
@@ -89,6 +91,7 @@ class OrderController extends Controller
       // using Partner email address as the main destination
       // and carbon copy to all the Vendors
       try {
+        // This silently fails when no queue driver available
         Mail::to($order->partner->email)
         ->cc($vendorEmails->toArray())
         ->queue(new OrderCompleted($order));
