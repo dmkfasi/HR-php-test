@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Order;
 use App\Partner;
+use App\Mail\OrderCompleted;
 
 class OrderController extends Controller
 {
@@ -68,8 +69,8 @@ class OrderController extends Controller
 
           return back()->with('update_success', __('Order update successful.'));
         } catch (Illuminate\Database\QueryException $e) {
-            // TODO Log error
-            return back()->with('update_failure', __('Unable to update Order.'));
+          // TODO Log error
+          return back()->with('update_failure', __('Unable to update Order.'));
         }
     }
 
@@ -80,8 +81,16 @@ class OrderController extends Controller
       // требуется отправить email - партнеру и 
       // всем поставщикам продуктов из заказа 
 
-//      
-//          Mail::to()
-//          ->queue(new \App\Mail\OrderCompleted($order));
+      // Collect Vendor email addresses from the Product list
+      $vendorEmails = $order->products->map(function ($p) {
+        return $p->vendor->email;
+      });
+
+      // Direct OrderCompleted mailable into a queue
+      // using Partner email address as the main destination
+      // and carbon copy to all the Vendors
+      Mail::to($order->partner->email)
+      ->cc($vendorEmails->toArray())
+      ->queue(new OrderCompleted($order));
     }
 }
