@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 class OrderController extends Controller
 {
     public function index() {
-        $order = new \App\Order();
-        $orders = $order->all();
+        // Might want to use chunk() instead...
+        $orders = \App\Order::all();
 
         if (\View::exists('orders.list')) {
             return view('orders.list')
@@ -43,7 +43,16 @@ class OrderController extends Controller
 
         $order = \App\Order::findOrFail($id);
         $order->update($data);
+        
+        // As the task describes, send out
+        // an email notification for extra credits
+        if ((int)$order->status == $order::STATE_COMPLETED) {
+          
+        }
 
+        // Updates product quantity within the pivot table
+        // Although out of score of the task,
+        // but since I have implement it anyways...
         foreach ($data['products'] as $k => $v) {
             $order->products()->updateExistingPivot(
                 $k,
