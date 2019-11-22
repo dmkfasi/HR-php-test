@@ -11,4 +11,9 @@ class Product extends Model
             ->withPivot('price', 'quantity')
             ->withTimestamps();
     }
+
+    public function vendors() {
+        return $this->belongsTo(Vendor::class, 'order_products')
+            ->withTimestamps();
+    }
 }
