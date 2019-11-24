@@ -14,10 +14,11 @@ return [
     |
     */
 
+    // Default env value for the key is only to avoid .env file modification
     'yandex' => [
         'method' => 'GET',
         'key_header_name' => 'X-Yandex-API-Key',
-        'key' => '5b47f070-49a0-4911-8218-934d47af20df',
+        'key' => env('WEATHER_YANDEX_KEY', '5b47f070-49a0-4911-8218-934d47af20df'),
         'uri' => 'https://api.weather.yandex.ru/v1/forecast',
         'lat' => '53.15',
         'lon' => '34.22',
