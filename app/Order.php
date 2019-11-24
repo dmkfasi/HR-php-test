@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     // This to accumulate line item total amount and get Order's total at the end
-    private $_line_item_amount = [0];
+    private $line_item_amount = [0];
 
     protected $fillable = [
         'client_email',
@@ -52,7 +52,7 @@ class Order extends Model
     // Calculates Order's total by computing line item amount
     public function getTotalAmount() {
       $this->getLineItemAmount();
-      $total = collect($this->_line_item_amount);
+      $total = collect($this->line_item_amount);
 
       return $total->sum();
     }    
@@ -66,6 +66,6 @@ class Order extends Model
 
     // Stores Line Item amount
     public function setLineItemAmount($amount = 0) {
-        $this->_line_item_amount[] = $amount;
+        $this->line_item_amount[] = $amount;
     }
 }
