@@ -39,7 +39,7 @@ return [
         'method' => 'GET',
         'key_header_name' => 'X-Yandex-API-Key',
         'key' => env('WEATHER_YANDEX_KEY'),
-        'uri' => 'https://api.weather.yandex.ru/v1/forecast',
+        'uri' => 'https://api.weather.yandex.ru/v1/informers',
         'lat' => '53.15',
         'lon' => '34.22',
         'lang' => 'ru_RU',
