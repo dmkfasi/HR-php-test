@@ -26,35 +26,35 @@ class WeatherService
     public $forecasts = null;
 
     public function __construct(Client $client) {
-      $this->http_method = config('weather.yandex.method');
-      $this->uri = config('weather.yandex.uri');
+      $this->http_method = config('services.weather-yandex.method');
+      $this->uri = config('services.weather-yandex.uri');
 
       $this->client = $client;
     }
 
     /**
-     *  Composes HTTP query array according to config settings (weather.php)
+     *  Composes HTTP query array according to config settings
      * 
      * @return array
      **/
     private function composeQuery()
     {
         return [
-            'lat' => config('weather.yandex.lat'),
-            'lon' => config('weather.yandex.lon'),
-            'lang' => config('weather.yandex.lang')
+            'lat'  => config('services.weather-yandex.lat'),
+            'lon'  => config('services.weather-yandex.lon'),
+            'lang' => config('services.weather-yandex.lang')
         ];
-    }
+   }
 
     /**
-     *  Composes HTTP headers according to config settings (weather.php)
+     *  Composes HTTP headers according to config settings
      * 
      * @return array
      **/
     private function composeHeaders()
     {
         return [
-            config('weather.yandex.key_header_name') => config('weather.yandex.key'),
+            config('services.weather-yandex.key_header_name') => config('services.weather-yandex.key'),
         ];
     }
 
@@ -65,7 +65,6 @@ class WeatherService
      **/
     public function fetch()
     {
-      // Download Weather data using GuzzleHttp library
       try {
           $response = $this->client->request(
             $this->http_method, 
