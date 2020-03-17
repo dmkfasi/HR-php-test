@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Services\WeatherService;
 
 class WeatherController extends Controller
 {
-    public function index() {
+    public function index(WeatherService $weatherService) {
 
         try {
-            $ws = new \App\WeatherYandexStream();
-            $ws->fetch();
-            $weather = $ws->ingress();
+            $weatherData = $weatherService->retrieveTemperature();
 
             if (\View::exists('weather.yandex')) {
-                return view('weather.yandex', [ 'weather' => $weather]);
+                return view('weather.yandex', [ 'weather' => $weatherData]);
             } else {
                 // TODO Log error
                 abort(404, __('No suitable view blade found.'));
