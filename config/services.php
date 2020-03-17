@@ -35,4 +35,16 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'weather-yandex' => [
+        'method' => 'GET',
+        'key_header_name' => 'X-Yandex-API-Key',
+        'key' => env('WEATHER_YANDEX_KEY'),
+        'uri' => 'https://api.weather.yandex.ru/v1/forecast',
+        'lat' => '53.15',
+        'lon' => '34.22',
+        'lang' => 'ru_RU',
+        'limit' => '1',
+        'hours' => 'false',
+        'extra' => 'false',
+    ],
 ];
