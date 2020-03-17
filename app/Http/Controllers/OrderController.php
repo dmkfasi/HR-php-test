@@ -12,7 +12,7 @@ class OrderController extends Controller
 {
     public function index() {
         // Might want to use chunk() instead...
-        $orders = Order::all();
+        $orders = Order::simplePaginate(15);
 
         if (\View::exists('orders.list')) {
             return view('orders.list')
