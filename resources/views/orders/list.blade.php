@@ -4,6 +4,9 @@
 <div class="row">
     <h3>Список заказов</h3>
 
+    <div class="container">
+        {{ $orders->links() }}
+    </div>
     <table class="table-bordered m-3 p-3">
         <th class="p-3 m-3">ид_заказа</th>
         <th class="p-3 m-3">название_партнера</th>
@@ -23,5 +26,8 @@
             @endforeach
         </tbody>
     </table>
+    <div class="container">
+        {{ $orders->links() }}
+    </div>
 </div>
 @endsection
